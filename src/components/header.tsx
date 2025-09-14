@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "#about", label: "About" },
   { href: "#services", label: "Services" },
-  { href: "#gallery", label: "Gallery" },
+  { href: "#testimonials", label: "Testimonials" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -45,14 +45,12 @@ const Header = () => {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 header-centered">
       <div className="container flex h-14 items-center">
-        <div className="mr-4 hidden md:flex">
-          <a href="#" className="flex items-center space-x-2">
-            <Leaf className="h-6 w-6 text-primary" />
-            <span className="font-bold font-headline text-lg">AyurVaid</span>
-          </a>
-        </div>
+        <a href="#" className="flex items-center space-x-2 mr-4">
+          <Leaf className="h-6 w-6 text-primary" />
+          <span className="font-bold font-headline text-lg">AyurVaid</span>
+        </a>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
             {/* You can add a search bar here if needed */}
@@ -61,11 +59,7 @@ const Header = () => {
             <NavLinks />
           </nav>
         </div>
-        <div className="md:hidden flex items-center justify-between w-full">
-            <a href="#" className="flex items-center space-x-2">
-                <Leaf className="h-6 w-6 text-primary" />
-                <span className="font-bold font-headline text-lg">AyurVaid</span>
-            </a>
+        <div className="md:hidden flex items-center">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">

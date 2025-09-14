@@ -1,129 +1,114 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import { useToast } from "@/hooks/use-toast";
-import { getHerbImages } from "@/app/actions";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
-import { Bot } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Quote, Star } from "lucide-react";
 
-const formSchema = z.object({
-  herbName: z.string().min(3, "Herb name must be at least 3 characters."),
-});
+const testimonials = [
+  {
+    name: "Priya Sharma",
+    condition: "Weight Management",
+    content: "After struggling with weight for years, Dr. Vaidraj's Ayurvedic approach transformed my life. I lost 15 kg naturally and feel more energetic than ever!",
+    rating: 5,
+    avatar: "PS",
+  },
+  {
+    name: "Rajesh Patel",
+    condition: "Chronic Acidity",
+    content: "The personalized treatment plan completely resolved my acidity issues. No more burning sensation or discomfort after meals. Truly holistic healing!",
+    rating: 5,
+    avatar: "RP",
+  },
+  {
+    name: "Anjali Mehta",
+    condition: "Sinus Problems",
+    content: "Seasonal allergies used to debilitate me every spring. Thanks to Dr. Vaidraj's herbal remedies, I can now enjoy the outdoors without constant sneezing and congestion.",
+    rating: 4,
+    avatar: "AM",
+  },
+  {
+    name: "Vikram Singh",
+    condition: "Piles Treatment",
+    content: "I was skeptical about non-surgical treatment for piles, but the Ayurvedic approach not only healed me but also prevented recurrence. Highly recommended!",
+    rating: 5,
+    avatar: "VS",
+  },
+  {
+    name: "Sunita Desai",
+    condition: "Stress & Anxiety",
+    content: "The herbal formulations and lifestyle guidance helped me manage my anxiety naturally. I've found peace and balance without any side effects.",
+    rating: 5,
+    avatar: "SD",
+  },
+  {
+    name: "Amit Kumar",
+    condition: "Joint Pain",
+    content: "As a fitness enthusiast, joint pain was limiting my activities. The Ayurvedic treatment restored my mobility and reduced inflammation significantly.",
+    rating: 4,
+    avatar: "AK",
+  },
+];
 
-const Gallery = () => {
-  const [isPending, startTransition] = useTransition();
-  const [images, setImages] = useState<string[]>([]);
-  const { toast } = useToast();
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      herbName: "",
-    },
-  });
-
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    setImages([]);
-    startTransition(async () => {
-      const result = await getHerbImages(values.herbName);
-      if (result.error) {
-        toast({
-          title: "Generation Failed",
-          description: result.error,
-          variant: "destructive",
-        });
-      } else if (result.data) {
-        setImages(result.data);
-        toast({
-          title: "Images Generated!",
-          description: `Successfully created images for ${values.herbName}.`,
-        });
-      }
-    });
-  };
-
+const Testimonials = () => {
   return (
-    <section id="gallery" className="bg-secondary/50">
+    <section id="testimonials" className="bg-secondary/50 py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-headline text-accent">
-            Medicinal Herb Gallery
+            Patient Testimonials
           </h2>
           <p className="mt-2 text-lg text-muted-foreground">
-            Generate images of Ayurvedic herbs with our AI tool.
+            Hear from people who transformed their health with our Ayurvedic treatments
           </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
-          <Card>
-            <CardHeader>
-              <CardTitle>Generate Herb Images</CardTitle>
-              <CardDescription>
-                Enter the name of a medicinal herb to see it in various settings.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="herbName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Herb Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., Ashwagandha, Turmeric" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" disabled={isPending} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                    {isPending ? "Generating..." : "Generate"}
-                    {!isPending && <Bot className="ml-2 h-4 w-4" />}
-                  </Button>
-                </form>
-              </Form>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {testimonials.map((testimonial, index) => (
+            <Card key={index} className="relative bg-white dark:bg-card border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="absolute top-4 right-4 text-accent">
+                <Quote className="h-6 w-6" />
+              </div>
+              <CardHeader className="pb-2">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-accent rounded-full h-12 w-12 flex items-center justify-center text-white font-bold">
+                    {testimonial.avatar}
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg">{testimonial.name}</CardTitle>
+                    <p className="text-sm text-muted-foreground">{testimonial.condition}</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">{testimonial.content}</p>
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 ${i < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Card className="max-w-3xl mx-auto bg-accent/10 border-accent/20">
+            <CardContent className="pt-6">
+              <blockquote className="text-lg md:text-xl italic text-foreground">
+                "Ayurveda is not just about treating disease, but about creating a balance that prevents illness and promotes longevity. Our approach treats the root cause, not just the symptoms."
+              </blockquote>
+              <div className="mt-4">
+                <p className="font-headline text-accent font-semibold">- Dr. A. Srinivas Vaidraj</p>
+                <p className="text-sm text-muted-foreground">B.A.M.S., Practicing Ayurveda for 20+ Years</p>
+              </div>
             </CardContent>
           </Card>
-
-          <div className="mt-8 md:mt-0">
-            <h3 className="text-2xl font-headline mb-4 text-center md:text-left">Generated Images</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {isPending &&
-                Array.from({ length: 3 }).map((_, i) => (
-                  <Skeleton key={i} className="aspect-square w-full rounded-lg" />
-                ))}
-              {!isPending && images.length > 0 &&
-                images.map((src, i) => (
-                  <div key={i} className="aspect-square relative rounded-lg overflow-hidden border shadow-sm">
-                    <Image
-                      src={src}
-                      alt={`Generated image of ${form.getValues("herbName")} ${i + 1}`}
-                      fill
-                      className="object-cover transition-transform hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 15vw"
-                    />
-                  </div>
-                ))}
-              {!isPending && images.length === 0 && (
-                 <div className="sm:col-span-3 text-center text-muted-foreground py-10 border-2 border-dashed rounded-lg">
-                    <p>Images will appear here once generated.</p>
-                 </div>
-              )}
-            </div>
-          </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default Gallery;
+export default Testimonials;
