@@ -1,3 +1,16 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "Lush green leaves with water droplets",
+      "imageUrl": "https://picsum.photos/seed/ayurveda-hero/1920/1080",
+      "imageHint": "nature leaves"
+    },
+    {
+      "id": "vaidraj-portrait",
+      "description": "Portrait of an experienced Indian doctor",
+      "imageUrl": "https://picsum.photos/seed/vaidraj/400/400",
+      "imageHint": "indian doctor"
+    }
+  ]
 }
